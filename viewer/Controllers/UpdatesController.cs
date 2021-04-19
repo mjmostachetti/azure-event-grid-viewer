@@ -117,19 +117,29 @@ namespace viewer.Controllers
         private async Task<IActionResult> HandleGridEvents(string jsonContent)
         {
             var events = JArray.Parse(jsonContent);
-            foreach (var e in events)
-            {
-                // Invoke a method on the clients for 
-                // an event grid notiification.                        
-                var details = JsonConvert.DeserializeObject<GridEvent<dynamic>>(e.ToString());
-                await this._hubContext.Clients.All.SendAsync(
+
+            //foreach (var e in events)
+            //{
+            //    // Invoke a method on the clients for 
+            //    // an event grid notiification.                        
+            //    var details = JsonConvert.DeserializeObject<GridEvent<dynamic>>(e.ToString());
+            //    await this._hubContext.Clients.All.SendAsync(
+            //        "gridupdate",
+            //        details.Id,
+            //        details.EventType,
+            //        details.Subject,
+            //        details.EventTime.ToLongTimeString(),
+            //        e.ToString());
+            //}
+
+
+            await this._hubContext.Clients.All.SendAsync(
                     "gridupdate",
-                    details.Id,
-                    details.EventType,
-                    details.Subject,
-                    details.EventTime.ToLongTimeString(),
-                    e.ToString());
-            }
+                    "test id",
+                    "test event type",
+                    "test event subject",
+                    null,
+                    $"# of events received - {events.Count}");
 
             return Ok();
         }
